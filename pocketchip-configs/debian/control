@@ -1,0 +1,15 @@
+Source: pocketchip-configs
+Section: unknown
+Priority: optional
+Maintainer: Ben Young <software@nextthing.co>
+Build-Depends: debhelper (>= 9)
+Standards-Version: 3.9.5
+Homepage: opensource.nextthing.co
+Git: github.com/NextThingCo
+
+Package: pocketchip-configs
+Architecture: all
+Depends: ${misc:Depends}
+Description: Configuration files for PocketCHIP
+ Configuration files for PocketCHIP, like touchscreen calibration and
+ keyboard mapping.
