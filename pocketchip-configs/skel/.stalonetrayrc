@@ -111,7 +111,7 @@ tint_level 0
 
 # transparent [<bool>]       # whether to use root-transparency (background
                              # image must be set with Esetroot or compatible utility)
-transparent true
+transparent false
 
 # vertical [<bool>]          # whether to use vertical layout (horisontal layout
                              # is used by default)
