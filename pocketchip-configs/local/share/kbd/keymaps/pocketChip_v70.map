@@ -15,6 +15,7 @@ keycode  31 = i I bracketleft I
 keycode  32 = o O bracketright O
 keycode  33 = p P bar P
 keycode  36 = Return NoSymbol KP_Enter
+keycode  49 = grave asciitilde Escape grave
 keycode  43 = h H less H
 keycode  44 = j J greater J
 keycode  45 = k K apostrophe K
