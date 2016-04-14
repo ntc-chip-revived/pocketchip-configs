@@ -1,0 +1,20 @@
+audioapi: 1
+noaudioin: False
+audioindev1: 0 2
+audioindevname1: sun4i-codec (hardware)
+noaudioout: False
+audiooutdev1: 0 2
+audiooutdevname1: sun4i-codec (hardware)
+audiobuf: 25
+rate: 44100
+callback: 0
+blocksize: 64
+nomidiin: True
+nomidiout: True
+path1: /usr/share/technosequencer/kiosk-plugin
+npath: 1
+standardpath: 1
+verbose: 0
+nloadlib: 0
+defeatrt: 0
+flags: 
