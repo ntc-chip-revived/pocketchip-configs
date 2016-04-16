@@ -2,3 +2,5 @@ local/* /usr/local/
 X11/* /usr/share/X11/
 skel /etc/
 rules.d/* /etc/udev/rules.d/
+bin/* /usr/bin/
+sbin/* /usr/sbin

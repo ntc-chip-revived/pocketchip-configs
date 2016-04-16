@@ -9,7 +9,7 @@ Git: github.com/NextThingCo
 
 Package: pocketchip-configs
 Architecture: all
-Depends: ${misc:Depends}
+Depends: ${misc:Depends}, mtd-utils
 Description: Configuration files for PocketCHIP
  Configuration files for PocketCHIP, like touchscreen calibration and
  keyboard mapping.
