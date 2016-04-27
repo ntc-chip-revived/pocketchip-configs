@@ -1,0 +1,5 @@
+[Default Applications]
+text/plain=leafpad.desktop
+
+[Added Associations]
+text/plain=leafpad.desktop;

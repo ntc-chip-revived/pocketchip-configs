@@ -1,0 +1,20 @@
+[UUI]
+row=1
+col=1
+
+[Debian 8.0 amd64 1]
+row=0
+col=1
+
+[Trash]
+row=2
+col=0
+
+[File System]
+row=1
+col=0
+
+[Home]
+row=0
+col=0
+
