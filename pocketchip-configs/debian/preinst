@@ -11,8 +11,4 @@ case "$1" in
 			--divert /etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml/thunar.xml \
 			/etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml/cc.thunar.xml
 	;;
-	*)
-	echo "preinst called with unknown argument \`$1`" >&2
-		exit 1
-	;;
 esac
