@@ -4,9 +4,6 @@ set -e
 
 if [ ! -f /etc/skel/.config/Thunar/cc.accels.scm ]; then
 		dpkg-divert --package pocketchip-configs --add --rename \
-			--divert /etc/skel/.config/Thunar/cc.accels.scm \
-			/etc/skel/.config/Thunar/accels.scm
-		dpkg-divert --package pocketchip-configs --add --rename \
 			--divert /etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml/cc.thunar.xml \
 			/etc/skel/.config/xfce4/xfconf/xfce-perchannel-xml/thunar.xml
 fi
