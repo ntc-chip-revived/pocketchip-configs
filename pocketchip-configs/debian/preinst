@@ -3,7 +3,7 @@
 set -e
 
 case "$1" in
-	install|upgrade)
+	install)
 		dpkg-divert --package pocketchip-configs --add --rename \
 			--divert /etc/skel/.config/Thunar/cc.accels.scm \
 			/etc/skel/.config/Thunar/accels.scm
