@@ -1,4 +1,3 @@
-```
 -- Standard awesome library
 require("awful")
 require("awful.autofocus")
@@ -331,6 +330,7 @@ end)
 
 -- {{{ Startup applications
 home_screen = {}
+home_screen.pid = awful.util.spawn_with_shell("/usr/bin/onboard $HOME/.config/onboard /usr/share/pocketchip-onboard/")
 home_screen.pid = awful.util.spawn_with_shell("pocket-home")
+home_screen.pid = awful.util.spawn_with_shell("xmodmap /usr/local/share/kbd/keymaps/pocketChip.map")
 -- }}}
-```
