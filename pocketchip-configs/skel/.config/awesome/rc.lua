@@ -95,18 +95,6 @@ root.buttons(awful.util.table.join(
 -- }}}
 
 -- {{{ Key bindings
-focus_next_client = function ()
-    if awful.client.next(1) == home_screen.client then
-        awful.client.focus.byidx( 2 )
-    else
-        awful.client.focus.byidx( 1 )
-    end
-
-    if client.focus then
-      client.focus:raise()
-    end
-end
-
 globalkeys = awful.util.table.join(
     awful.key({ }, "XF86PowerOff",
         function ()
@@ -120,17 +108,17 @@ globalkeys = awful.util.table.join(
 
 clientkeys = awful.util.table.join(
     awful.key({ "Control"         }, "q", 
-      function (c)
-        if c ~= home_screen.client then
-          c:kill() 
-        end
-      end)
+        function (c)
+            if c ~= home_screen.client then
+                c:kill()
+            end
+        end)
 )
 
 -- Compute the maximum number of digit we need, limited to 9
 keynumber = 0
 for s = 1, screen.count() do
-   keynumber = math.min(9, math.max(#tags[s], keynumber));
+    keynumber = math.min(9, math.max(#tags[s], keynumber));
 end
 
 clientbuttons = awful.util.table.join(
@@ -160,7 +148,7 @@ awful.rules.rules = {
 -- Signal function to execute when a new client appears.
 match_home_screen = function (c)
   if c.pid == home_screen.pid then
-    return true
+      return true
   end
   return false
 end
@@ -168,7 +156,7 @@ end
 client.add_signal("manage", function (c, startup)
     if not startup then
       if match_home_screen(c) then
-        home_screen.client = c
+          home_screen.client = c
       end
 
       -- Put windows in a smart way, only if they does not set an initial position.
@@ -178,6 +166,20 @@ client.add_signal("manage", function (c, startup)
       end
     end
 end)
+-- }}}
+
+-- {{{ client API
+focus_next_client = function ()
+    if awful.client.next(1) == home_screen.client then
+        awful.client.focus.byidx( 2 )
+    else
+        awful.client.focus.byidx( 1 )
+    end
+
+    if client.focus then
+        client.focus:raise()
+    end
+end
 -- }}}
 
 -- {{{ Startup applications
