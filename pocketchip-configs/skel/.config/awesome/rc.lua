@@ -44,6 +44,36 @@ do
 end
 -- }}}
 
+-- {{{ client API
+focus_next_client = function ()
+    if awful.client.next(1) == home_screen.client then
+        awful.client.focus.byidx( 2 )
+    else
+        awful.client.focus.byidx( 1 )
+    end
+
+    if client.focus then
+        client.focus:raise()
+    end
+end
+
+focus_client_by_window_id = function (window_id)
+    for _, c in ipairs(client.get()) do
+        if c.window == window_id then
+            client.focus = c
+            if client.focus then
+                client.focus:raise()
+            end
+        end
+    end
+end
+
+focus_home_screen = function ()
+    client.focus = home_screen.client
+    client.focus:raise()
+end
+-- }}}
+
 -- {{{ Variable definitions
 -- Themes define colours, icons, and wallpapers
 beautiful.init("/home/chip/.config/awesome/theme.lua")
@@ -96,11 +126,7 @@ root.buttons(awful.util.table.join(
 
 -- {{{ Key bindings
 globalkeys = awful.util.table.join(
-    awful.key({ }, "XF86PowerOff",
-        function ()
-            client.focus = home_screen.client
-            client.focus:raise()
-        end),
+    awful.key({ }                  , "XF86PowerOff", focus_home_screen),
     awful.key({ modkey,           }, "Tab", focus_next_client),
     awful.key({ "Control",        }, "Tab", focus_next_client),
     awful.key({ modkey,           }, "Return", function () awful.util.spawn("dmenu_run") end)
@@ -166,20 +192,6 @@ client.add_signal("manage", function (c, startup)
       end
     end
 end)
--- }}}
-
--- {{{ client API
-focus_next_client = function ()
-    if awful.client.next(1) == home_screen.client then
-        awful.client.focus.byidx( 2 )
-    else
-        awful.client.focus.byidx( 1 )
-    end
-
-    if client.focus then
-        client.focus:raise()
-    end
-end
 -- }}}
 
 -- {{{ Startup applications
