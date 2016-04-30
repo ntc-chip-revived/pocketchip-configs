@@ -7,10 +7,10 @@ require("beautiful")
 -- Notification library
 require("naughty")
 
--- disable startup-notification globally
+--- disable startup-notification globally
 local oldspawn = awful.util.spawn
 awful.util.spawn = function (s)
-  oldspawn(s, false)
+    oldspawn(s, false)
 end
 
 dbg = function (msg)
@@ -71,6 +71,11 @@ end
 focus_home_screen = function ()
     client.focus = home_screen.client
     client.focus:raise()
+end
+
+hide_mouse_cursor = function ()
+    -- hide mouse pointer on root window
+    awful.util.spawn_with_shell("xsetroot -cursor /home/chip/.config/awesome/blank_ptr.xbm /home/chip/.config/awesome/blank_ptr.xbm")
 end
 -- }}}
 
@@ -186,6 +191,10 @@ match_onboard = function (c)
   return false
 end
 
+client.add_signal("focus", function (c)
+  hide_mouse_cursor()
+end)
+
 client.add_signal("unfocus", function (c)
   if c == onboard.client then
       awful.util.spawn("xdotool search --name feh windowactivate")
@@ -193,16 +202,16 @@ client.add_signal("unfocus", function (c)
 end)
 
 client.add_signal("manage", function (c, startup)
+    if match_onboard(c) then
+        onboard.client = c
+        c.ontop = true
+    end
+
+    if match_home_screen(c) then
+        home_screen.client = c
+    end
+
     if not startup then
-      if match_onboard(c) then
-          onboard.client = c
-          c.ontop = true
-      end
-
-      if match_home_screen(c) then
-          home_screen.client = c
-      end
-
       -- Put windows in a smart way, only if they does not set an initial position.
       if not c.size_hints.user_position and not c.size_hints.program_position then
           awful.placement.no_overlap(c)
@@ -213,9 +222,16 @@ end)
 -- }}}
 
 -- {{{ Startup applications
+
+hide_mouse_cursor()
+-- map the keyboard
+awful.util.spawn_with_shell("xmodmap /usr/local/share/kbd/keymaps/pocketChip.map")
+
+-- launch onboarding
 onboard = {}
 onboard.pid = awful.util.spawn_with_shell("/usr/bin/onboard $HOME/.config/onboard /usr/share/pocketchip-onboard/")
-awful.util.spawn_with_shell("xmodmap /usr/local/share/kbd/keymaps/pocketChip.map")
+
+-- launch home screen
 home_screen = {}
 home_screen.pid = awful.util.spawn_with_shell("pocket-home")
 -- }}}
