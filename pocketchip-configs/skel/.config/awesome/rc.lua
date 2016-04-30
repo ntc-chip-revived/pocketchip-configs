@@ -166,9 +166,7 @@ awful.rules.rules = {
                      border_color = beautiful.border_normal,
                      focus = true,
                      keys = clientkeys,
-                     buttons = clientbuttons } },
-    { rule = { class = "feh"},
-      properties = { ontop = true } }
+                     buttons = clientbuttons } }
 }
 -- }}}
 
@@ -181,8 +179,26 @@ match_home_screen = function (c)
   return false
 end
 
+match_onboard = function (c)
+  if c.class == "feh" then
+      return true
+  end
+  return false
+end
+
+client.add_signal("unfocus", function (c)
+  if c == onboard.client then
+      awful.util.spawn("xdotool search --name feh windowactivate")
+  end
+end)
+
 client.add_signal("manage", function (c, startup)
     if not startup then
+      if match_onboard(c) then
+          onboard.client = c
+          c.ontop = true
+      end
+
       if match_home_screen(c) then
           home_screen.client = c
       end
@@ -197,7 +213,8 @@ end)
 -- }}}
 
 -- {{{ Startup applications
-awful.util.spawn_with_shell("/usr/bin/onboard $HOME/.config/onboard /usr/share/pocketchip-onboard/")
+onboard = {}
+onboard.pid = awful.util.spawn_with_shell("/usr/bin/onboard $HOME/.config/onboard /usr/share/pocketchip-onboard/")
 awful.util.spawn_with_shell("xmodmap /usr/local/share/kbd/keymaps/pocketChip.map")
 home_screen = {}
 home_screen.pid = awful.util.spawn_with_shell("pocket-home")
