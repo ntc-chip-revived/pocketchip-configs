@@ -13,10 +13,13 @@ awful.util.spawn = function (s)
     oldspawn(s, false)
 end
 
+local USE_DBG = false
 dbg = function (msg)
-    naughty.notify({ preset = naughty.config.presets.critical,
-                     title = "DBG MSG:",
-                     text = msg })
+    if USE_DBG then
+        naughty.notify({ preset = naughty.config.presets.critical,
+                         title = "DBG MSG:",
+                         text = msg })
+    end
 end
 
 -- {{{ Error handling
