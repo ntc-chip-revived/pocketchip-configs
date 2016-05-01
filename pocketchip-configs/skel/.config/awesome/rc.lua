@@ -8,24 +8,33 @@ require("beautiful")
 require("naughty")
 
 --- disable startup-notification globally
-local oldspawn = awful.util.spawn
-awful.util.spawn = function (s)
-    oldspawn(s, false)
+-- local oldspawn = awful.util.spawn
+-- awful.util.spawn = function (s)
+--     oldspawn(s, false)
+-- end
+
+local USE_DBG = false
+dbg = function (msg)
+    if USE_DBG then
+        naughty.notify({ preset = naughty.config.presets.critical,
+                         title = "DBG MSG:",
+                         text = msg })
+    end
 end
 
-dbg = function (msg)
-    naughty.notify({ preset = naughty.config.presets.critical,
-                     title = "DBG MSG:",
-                     text = msg })
+dbgclient = function (c)
+    dbg("manage "..tostring(c.pid).." "..tostring(c.window).." "..(c.name or "_"))
 end
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
 -- another config (This code will only ever execute for the fallback config)
 if awesome.startup_errors then
-    naughty.notify({ preset = naughty.config.presets.critical,
-                     title = "Oops, there were errors during startup!",
-                     text = awesome.startup_errors })
+    if USE_DBG then
+        naughty.notify({ preset = naughty.config.presets.critical,
+                         title = "Oops, there were errors during startup!",
+                         text = awesome.startup_errors })
+    end
 end
 
 -- Handle runtime errors after startup
@@ -45,6 +54,9 @@ end
 -- }}}
 
 -- {{{ client API
+onboard = {}
+home_screen = {}
+
 focus_next_client = function ()
     if awful.client.next(1) == home_screen.client then
         awful.client.focus.byidx( 2 )
@@ -68,14 +80,28 @@ focus_client_by_window_id = function (window_id)
     end
 end
 
+launch_home_screen = function ()
+    if home_screen.client then
+        client:kill()
+        home_screen = {}
+    end
+    home_screen.pid = awful.util.spawn_with_shell("pocket-home")   
+end
+
 focus_home_screen = function ()
-    client.focus = home_screen.client
-    client.focus:raise()
+    if home_screen.client then
+        client.focus = home_screen.client
+        if client.focus then
+            client.focus:raise()
+        end
+    else
+        launch_home_screen()
+    end
 end
 
 hide_mouse_cursor = function ()
     -- hide mouse pointer on root window
-    awful.util.spawn_with_shell("xsetroot -cursor /home/chip/.config/awesome/blank_ptr.xbm /home/chip/.config/awesome/blank_ptr.xbm")
+    awful.util.spawn_with_shell("xsetroot -cursor $HOME/.config/awesome/blank_ptr.xbm $HOME/.config/awesome/blank_ptr.xbm")
 end
 -- }}}
 
@@ -84,19 +110,19 @@ end
 beautiful.init("/home/chip/.config/awesome/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
-terminal = "x-terminal-emulator"
-editor = os.getenv("EDITOR") or "editor"
-editor_cmd = terminal .. " -e " .. editor
+local terminal = "x-terminal-emulator"
+local editor = os.getenv("EDITOR") or "editor"
+local editor_cmd = terminal .. " -e " .. editor
 
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
 -- If you do not like this or do not have such a key,
 -- I suggest you to remap Mod4 to another key using xmodmap or other tools.
 -- However, you can use another modifier like Mod1, but it may interact with others.
-modkey = "Mod1"
+local modkey = "Mod1"
 
 -- Table of layouts to cover with awful.layout.inc, order matters.
-layouts =
+local layouts =
 {
     -- awful.layout.suit.floating,
     -- awful.layout.suit.tile,
@@ -115,7 +141,7 @@ layouts =
 
 -- {{{ Tags
 -- Define a tag table which hold all screen tags.
-tags = {}
+local tags = {}
 for s = 1, screen.count() do
     -- Each screen has its own tag table.
     tags[s] = awful.tag({ 1 }, s, layouts[1])
@@ -130,14 +156,14 @@ root.buttons(awful.util.table.join(
 -- }}}
 
 -- {{{ Key bindings
-globalkeys = awful.util.table.join(
+local globalkeys = awful.util.table.join(
     awful.key({ }                  , "XF86PowerOff", focus_home_screen),
     awful.key({ modkey,           }, "Tab", focus_next_client),
     awful.key({ "Control",        }, "Tab", focus_next_client),
-    awful.key({ modkey,           }, "Return", function () awful.util.spawn("dmenu_run") end)
+    awful.key({ modkey,           }, "Return", function () awful.util.spawn("dmenu_run", false) end)
 )
 
-clientkeys = awful.util.table.join(
+local clientkeys = awful.util.table.join(
     awful.key({ "Control"         }, "q", 
         function (c)
             if c ~= home_screen.client then
@@ -147,17 +173,17 @@ clientkeys = awful.util.table.join(
 )
 
 -- Compute the maximum number of digit we need, limited to 9
-keynumber = 0
+local keynumber = 0
 for s = 1, screen.count() do
     keynumber = math.min(9, math.max(#tags[s], keynumber));
 end
 
-clientbuttons = awful.util.table.join(
+local clientbuttons = awful.util.table.join(
     awful.button({ }, 1, function (c) client.focus = c; c:raise() end),
     -- left click and mode allows you to move windows
     awful.button({ modkey }, 1, awful.mouse.client.move),
     -- right click when holding mod
-    awful.button({ "Control" }, 1, function (c) awful.util.spawn("xdotool click 3") end))
+    awful.button({ "Control" }, 1, function (c) awful.util.spawn("xdotool click 3", false) end))
 
 -- Set global keys
 root.keys(globalkeys)
@@ -177,19 +203,6 @@ awful.rules.rules = {
 
 -- {{{ Signals
 -- Signal function to execute when a new client appears.
-match_home_screen = function (c)
-  if c.pid == home_screen.pid then
-      return true
-  end
-  return false
-end
-
-match_onboard = function (c)
-  if c.class == "feh" then
-      return true
-  end
-  return false
-end
 
 client.add_signal("focus", function (c)
   hide_mouse_cursor()
@@ -197,18 +210,18 @@ end)
 
 client.add_signal("unfocus", function (c)
   if c == onboard.client then
-      awful.util.spawn("xdotool search --name feh windowactivate")
+      awful.util.spawn("xdotool search --name feh windowactivate", false)
   end
 end)
 
 client.add_signal("manage", function (c, startup)
-    if match_onboard(c) then
+    -- match homescreen
+    if c.pid == home_screen.pid then
+        home_screen.client = c
+    -- match onboarding
+    elseif c.class == "feh" then
         onboard.client = c
         c.ontop = true
-    end
-
-    if match_home_screen(c) then
-        home_screen.client = c
     end
 
     if not startup then
@@ -219,19 +232,34 @@ client.add_signal("manage", function (c, startup)
       end
     end
 end)
+
+-- cleanup watched clients
+-- FIXME: make sure to ignore if we don't have a client, 
+-- apparently it's possible for unmanage to be called before manage
+-- when certain applications first open.
+client.add_signal("unmanage", function (c)
+    -- match homescreen
+    if c.pid == home_screen.pid and
+        home_screen.client then
+        home_screen = {}
+    -- match onboarding
+    elseif c.class == "feh" and
+        onboard.client then
+        onboard = {}
+        focus_home_screen()
+    end
+end)
 -- }}}
 
 -- {{{ Startup applications
-
 hide_mouse_cursor()
+
 -- map the keyboard
 awful.util.spawn_with_shell("xmodmap /usr/local/share/kbd/keymaps/pocketChip.map")
 
 -- launch onboarding
-onboard = {}
 onboard.pid = awful.util.spawn_with_shell("/usr/bin/onboard $HOME/.config/onboard /usr/share/pocketchip-onboard/")
 
 -- launch home screen
-home_screen = {}
-home_screen.pid = awful.util.spawn_with_shell("pocket-home")
+launch_home_screen()
 -- }}}
