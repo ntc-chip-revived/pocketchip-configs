@@ -84,19 +84,19 @@ end
 beautiful.init("/home/chip/.config/awesome/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
-terminal = "x-terminal-emulator"
-editor = os.getenv("EDITOR") or "editor"
-editor_cmd = terminal .. " -e " .. editor
+local terminal = "x-terminal-emulator"
+local editor = os.getenv("EDITOR") or "editor"
+local editor_cmd = terminal .. " -e " .. editor
 
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
 -- If you do not like this or do not have such a key,
 -- I suggest you to remap Mod4 to another key using xmodmap or other tools.
 -- However, you can use another modifier like Mod1, but it may interact with others.
-modkey = "Mod1"
+local modkey = "Mod1"
 
 -- Table of layouts to cover with awful.layout.inc, order matters.
-layouts =
+local layouts =
 {
     -- awful.layout.suit.floating,
     -- awful.layout.suit.tile,
@@ -115,7 +115,7 @@ layouts =
 
 -- {{{ Tags
 -- Define a tag table which hold all screen tags.
-tags = {}
+local tags = {}
 for s = 1, screen.count() do
     -- Each screen has its own tag table.
     tags[s] = awful.tag({ 1 }, s, layouts[1])
@@ -130,14 +130,14 @@ root.buttons(awful.util.table.join(
 -- }}}
 
 -- {{{ Key bindings
-globalkeys = awful.util.table.join(
+local globalkeys = awful.util.table.join(
     awful.key({ }                  , "XF86PowerOff", focus_home_screen),
     awful.key({ modkey,           }, "Tab", focus_next_client),
     awful.key({ "Control",        }, "Tab", focus_next_client),
     awful.key({ modkey,           }, "Return", function () awful.util.spawn("dmenu_run") end)
 )
 
-clientkeys = awful.util.table.join(
+local clientkeys = awful.util.table.join(
     awful.key({ "Control"         }, "q", 
         function (c)
             if c ~= home_screen.client then
@@ -147,12 +147,12 @@ clientkeys = awful.util.table.join(
 )
 
 -- Compute the maximum number of digit we need, limited to 9
-keynumber = 0
+local keynumber = 0
 for s = 1, screen.count() do
     keynumber = math.min(9, math.max(#tags[s], keynumber));
 end
 
-clientbuttons = awful.util.table.join(
+local clientbuttons = awful.util.table.join(
     awful.button({ }, 1, function (c) client.focus = c; c:raise() end),
     -- left click and mode allows you to move windows
     awful.button({ modkey }, 1, awful.mouse.client.move),
@@ -177,19 +177,9 @@ awful.rules.rules = {
 
 -- {{{ Signals
 -- Signal function to execute when a new client appears.
-match_home_screen = function (c)
-  if c.pid == home_screen.pid then
-      return true
-  end
-  return false
-end
 
-match_onboard = function (c)
-  if c.class == "feh" then
-      return true
-  end
-  return false
-end
+onboard = {}
+home_screen = {}
 
 client.add_signal("focus", function (c)
   hide_mouse_cursor()
@@ -202,13 +192,13 @@ client.add_signal("unfocus", function (c)
 end)
 
 client.add_signal("manage", function (c, startup)
-    if match_onboard(c) then
+    -- match homescreen
+    if c.pid == home_screen.pid then
+        home_screen.client = c
+    -- match onboarding
+    elseif c.class == "feh" then
         onboard.client = c
         c.ontop = true
-    end
-
-    if match_home_screen(c) then
-        home_screen.client = c
     end
 
     if not startup then
@@ -222,16 +212,14 @@ end)
 -- }}}
 
 -- {{{ Startup applications
-
 hide_mouse_cursor()
+
 -- map the keyboard
 awful.util.spawn_with_shell("xmodmap /usr/local/share/kbd/keymaps/pocketChip.map")
 
 -- launch onboarding
-onboard = {}
 onboard.pid = awful.util.spawn_with_shell("/usr/bin/onboard $HOME/.config/onboard /usr/share/pocketchip-onboard/")
 
 -- launch home screen
-home_screen = {}
 home_screen.pid = awful.util.spawn_with_shell("pocket-home")
 -- }}}
