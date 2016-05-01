@@ -8,10 +8,10 @@ require("beautiful")
 require("naughty")
 
 --- disable startup-notification globally
-local oldspawn = awful.util.spawn
-awful.util.spawn = function (s)
-    oldspawn(s, false)
-end
+-- local oldspawn = awful.util.spawn
+-- awful.util.spawn = function (s)
+--     oldspawn(s, false)
+-- end
 
 local USE_DBG = false
 dbg = function (msg)
@@ -160,7 +160,7 @@ local globalkeys = awful.util.table.join(
     awful.key({ }                  , "XF86PowerOff", focus_home_screen),
     awful.key({ modkey,           }, "Tab", focus_next_client),
     awful.key({ "Control",        }, "Tab", focus_next_client),
-    awful.key({ modkey,           }, "Return", function () awful.util.spawn("dmenu_run") end)
+    awful.key({ modkey,           }, "Return", function () awful.util.spawn("dmenu_run", false) end)
 )
 
 local clientkeys = awful.util.table.join(
@@ -183,7 +183,7 @@ local clientbuttons = awful.util.table.join(
     -- left click and mode allows you to move windows
     awful.button({ modkey }, 1, awful.mouse.client.move),
     -- right click when holding mod
-    awful.button({ "Control" }, 1, function (c) awful.util.spawn("xdotool click 3") end))
+    awful.button({ "Control" }, 1, function (c) awful.util.spawn("xdotool click 3", false) end))
 
 -- Set global keys
 root.keys(globalkeys)
@@ -210,7 +210,7 @@ end)
 
 client.add_signal("unfocus", function (c)
   if c == onboard.client then
-      awful.util.spawn("xdotool search --name feh windowactivate")
+      awful.util.spawn("xdotool search --name feh windowactivate", false)
   end
 end)
 
