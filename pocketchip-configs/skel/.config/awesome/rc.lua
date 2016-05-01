@@ -246,6 +246,7 @@ client.add_signal("unmanage", function (c)
     elseif c.class == "feh" and
         onboard.client then
         onboard = {}
+        focus_home_screen()
     end
 end)
 -- }}}
