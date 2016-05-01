@@ -81,7 +81,7 @@ focus_client_by_window_id = function (window_id)
 end
 
 launch_home_screen = function ()
-    if home_screen.client ~= nil then
+    if home_screen.client then
         client:kill()
         home_screen = {}
     end
@@ -89,7 +89,7 @@ launch_home_screen = function ()
 end
 
 focus_home_screen = function ()
-    if home_screen.client ~= nil then
+    if home_screen.client then
         client.focus = home_screen.client
         if client.focus then
             client.focus:raise()
@@ -233,15 +233,18 @@ client.add_signal("manage", function (c, startup)
     end
 end)
 
+-- cleanup watched clients
+-- FIXME: make sure to ignore if we don't have a client, 
+-- apparently it's possible for unmanage to be called before manage
+-- when certain applications first open.
 client.add_signal("unmanage", function (c)
-    -- cleanup watched clients, but ignore if we don't have a client, that means its spawning
     -- match homescreen
     if c.pid == home_screen.pid and
-        home_screen.client ~= nil then
+        home_screen.client then
         home_screen = {}
     -- match onboarding
     elseif c.class == "feh" and
-        onboard.client ~= nil then
+        onboard.client then
         onboard = {}
     end
 end)
