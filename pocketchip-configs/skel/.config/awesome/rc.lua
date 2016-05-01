@@ -22,6 +22,10 @@ dbg = function (msg)
     end
 end
 
+dbgclient = function (c)
+    dbg("manage "..tostring(c.pid).." "..tostring(c.window).." "..(c.name or "_"))
+end
+
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
 -- another config (This code will only ever execute for the fallback config)
@@ -81,7 +85,7 @@ launch_home_screen = function ()
         client:kill()
         home_screen = {}
     end
-    home_screen.pid = awful.util.spawn("pocket-home")   
+    home_screen.pid = awful.util.spawn_with_shell("pocket-home")   
 end
 
 focus_home_screen = function ()
@@ -230,12 +234,14 @@ client.add_signal("manage", function (c, startup)
 end)
 
 client.add_signal("unmanage", function (c)
-    dbg("unmanage")
+    -- cleanup watched clients, but ignore if we don't have a client, that means its spawning
     -- match homescreen
-    if c.pid == home_screen.pid then
+    if c.pid == home_screen.pid and
+        home_screen.client ~= nil then
         home_screen = {}
     -- match onboarding
-    elseif c.class == "feh" then
+    elseif c.class == "feh" and
+        onboard.client ~= nil then
         onboard = {}
     end
 end)
