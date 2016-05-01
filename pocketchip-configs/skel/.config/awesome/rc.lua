@@ -26,9 +26,11 @@ end
 -- Check if awesome encountered an error during startup and fell back to
 -- another config (This code will only ever execute for the fallback config)
 if awesome.startup_errors then
-    naughty.notify({ preset = naughty.config.presets.critical,
-                     title = "Oops, there were errors during startup!",
-                     text = awesome.startup_errors })
+    if USE_DBG then
+        naughty.notify({ preset = naughty.config.presets.critical,
+                         title = "Oops, there were errors during startup!",
+                         text = awesome.startup_errors })
+    end
 end
 
 -- Handle runtime errors after startup
@@ -48,6 +50,9 @@ end
 -- }}}
 
 -- {{{ client API
+onboard = {}
+home_screen = {}
+
 focus_next_client = function ()
     if awful.client.next(1) == home_screen.client then
         awful.client.focus.byidx( 2 )
@@ -71,14 +76,28 @@ focus_client_by_window_id = function (window_id)
     end
 end
 
+launch_home_screen = function ()
+    if home_screen.client ~= nil then
+        client:kill()
+        home_screen = {}
+    end
+    home_screen.pid = awful.util.spawn("pocket-home")   
+end
+
 focus_home_screen = function ()
-    client.focus = home_screen.client
-    client.focus:raise()
+    if home_screen.client ~= nil then
+        client.focus = home_screen.client
+        if client.focus then
+            client.focus:raise()
+        end
+    else
+        launch_home_screen()
+    end
 end
 
 hide_mouse_cursor = function ()
     -- hide mouse pointer on root window
-    awful.util.spawn_with_shell("xsetroot -cursor /home/chip/.config/awesome/blank_ptr.xbm /home/chip/.config/awesome/blank_ptr.xbm")
+    awful.util.spawn_with_shell("xsetroot -cursor $HOME/.config/awesome/blank_ptr.xbm $HOME/.config/awesome/blank_ptr.xbm")
 end
 -- }}}
 
@@ -181,9 +200,6 @@ awful.rules.rules = {
 -- {{{ Signals
 -- Signal function to execute when a new client appears.
 
-onboard = {}
-home_screen = {}
-
 client.add_signal("focus", function (c)
   hide_mouse_cursor()
 end)
@@ -212,6 +228,17 @@ client.add_signal("manage", function (c, startup)
       end
     end
 end)
+
+client.add_signal("unmanage", function (c)
+    dbg("unmanage")
+    -- match homescreen
+    if c.pid == home_screen.pid then
+        home_screen = {}
+    -- match onboarding
+    elseif c.class == "feh" then
+        onboard = {}
+    end
+end)
 -- }}}
 
 -- {{{ Startup applications
@@ -224,5 +251,5 @@ awful.util.spawn_with_shell("xmodmap /usr/local/share/kbd/keymaps/pocketChip.map
 onboard.pid = awful.util.spawn_with_shell("/usr/bin/onboard $HOME/.config/onboard /usr/share/pocketchip-onboard/")
 
 -- launch home screen
-home_screen.pid = awful.util.spawn_with_shell("pocket-home")
+launch_home_screen()
 -- }}}
