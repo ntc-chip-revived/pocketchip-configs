@@ -209,10 +209,18 @@ client.add_signal("unfocus", function (c)
 end)
 
 client.add_signal("manage", function (c, startup)
-    -- match homescreen
+    -- match homescreen by pid
     if c.pid == home_screen.pid then
         home_screen.client = c
-    -- match onboarding
+    -- FIXME: match homescreen by class, necessary because the homescreen
+    -- appears to sometimes reopen its main window
+    elseif c.class == "pocket-home" then
+        if home_screen.client then
+            home_screen.client:kill()
+        end
+        home_screen.client = c
+        home_screen.pid = c.pid
+    -- match onboarding by class
     elseif c.class == "feh" then
         onboard.client = c
         c.ontop = true
