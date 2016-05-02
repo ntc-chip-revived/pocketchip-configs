@@ -7,12 +7,6 @@ require("beautiful")
 -- Notification library
 require("naughty")
 
---- disable startup-notification globally
--- local oldspawn = awful.util.spawn
--- awful.util.spawn = function (s)
---     oldspawn(s, false)
--- end
-
 local USE_DBG = false
 dbg = function (msg)
     if USE_DBG then
