@@ -204,7 +204,7 @@ end)
 
 client.add_signal("unfocus", function (c)
   if c == onboard.client then
-      awful.util.spawn("xdotool search --name feh windowactivate", false)
+      awful.util.spawn("xdotool search --name ahoy windowactivate", false)
   end
 end)
 
@@ -213,7 +213,7 @@ client.add_signal("manage", function (c, startup)
     if c.name == "pocket-home" then
         home_screen.client = c
     -- match onboarding by class
-    elseif c.class == "feh" then
+    elseif c.class == "ahoy" then
         onboard.client = c
         c.ontop = true
     end
@@ -236,7 +236,7 @@ client.add_signal("unmanage", function (c)
     if c.name == "pocket-home" then
         home_screen = {}
     -- match onboarding
-    elseif c.class == "feh" then
+    elseif c.class == "ahoy" then
         onboard = {}
         focus_home_screen()
     end
@@ -250,7 +250,7 @@ hide_mouse_cursor()
 awful.util.spawn_with_shell("xmodmap /usr/local/share/kbd/keymaps/pocketChip.map")
 
 -- launch onboarding
-awful.util.spawn_with_shell("/usr/bin/onboard $HOME/.config/onboard /usr/share/pocketchip-onboard/")
+awful.util.spawn_with_shell("onboard .config/onboard /usr/share/pocketchip-onboard/")
 
 -- launch home screen
 launch_home_screen()
