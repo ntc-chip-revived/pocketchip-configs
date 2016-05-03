@@ -16,8 +16,8 @@ dbg = function (msg)
     end
 end
 
-dbgclient = function (c)
-    dbg("manage "..tostring(c.pid).." "..tostring(c.window).." "..(c.name or "_"))
+dbgclient = function (event_name, c)
+    dbg(event_name.." "..tostring(c.pid).." "..tostring(c.window).." "..(c.class or "_c").." "..(c.name or "_n"))
 end
 
 -- {{{ Error handling
