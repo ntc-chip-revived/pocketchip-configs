@@ -16,8 +16,8 @@ dbg = function (msg)
     end
 end
 
-dbgclient = function (c)
-    dbg("manage "..tostring(c.pid).." "..tostring(c.window).." "..(c.name or "_"))
+dbgclient = function (event_name, c)
+    dbg(event_name.." "..tostring(c.pid).." "..tostring(c.window).." "..(c.class or "_c").." "..(c.name or "_n"))
 end
 
 -- {{{ Error handling
@@ -79,7 +79,7 @@ launch_home_screen = function ()
         client:kill()
         home_screen = {}
     end
-    home_screen.pid = awful.util.spawn_with_shell("pocket-home")   
+    awful.util.spawn_with_shell("pocket-home")
 end
 
 focus_home_screen = function ()
@@ -210,16 +210,8 @@ end)
 
 client.add_signal("manage", function (c, startup)
     -- match homescreen by pid
-    if c.pid == home_screen.pid then
+    if c.name == "pocket-home" then
         home_screen.client = c
-    -- FIXME: match homescreen by class, necessary because the homescreen
-    -- appears to sometimes reopen its main window
-    elseif c.class == "pocket-home" then
-        if home_screen.client then
-            home_screen.client:kill()
-        end
-        home_screen.client = c
-        home_screen.pid = c.pid
     -- match onboarding by class
     elseif c.class == "feh" then
         onboard.client = c
@@ -241,12 +233,10 @@ end)
 -- when certain applications first open.
 client.add_signal("unmanage", function (c)
     -- match homescreen
-    if c.pid == home_screen.pid and
-        home_screen.client then
+    if c.name == "pocket-home" then
         home_screen = {}
     -- match onboarding
-    elseif c.class == "feh" and
-        onboard.client then
+    elseif c.class == "feh" then
         onboard = {}
         focus_home_screen()
     end
@@ -260,7 +250,7 @@ hide_mouse_cursor()
 awful.util.spawn_with_shell("xmodmap /usr/local/share/kbd/keymaps/pocketChip.map")
 
 -- launch onboarding
-onboard.pid = awful.util.spawn_with_shell("/usr/bin/onboard $HOME/.config/onboard /usr/share/pocketchip-onboard/")
+awful.util.spawn_with_shell("/usr/bin/onboard $HOME/.config/onboard /usr/share/pocketchip-onboard/")
 
 -- launch home screen
 launch_home_screen()
