@@ -250,7 +250,7 @@ hide_mouse_cursor()
 awful.util.spawn_with_shell("xmodmap /usr/local/share/kbd/keymaps/pocketChip.map")
 
 -- launch onboarding
-awful.util.spawn_with_shell("onboard .config/onboard /usr/share/pocketchip-onboard/")
+awful.util.spawn_with_shell("onboard $HOME/.config/onboard /usr/share/pocketchip-onboard/")
 
 -- launch home screen
 launch_home_screen()

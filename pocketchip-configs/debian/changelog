@@ -1,3 +1,9 @@
+pocketchip-configs (0.3) stable; urgency=low
+
+  * Fix main onboarding file location.
+
+ -- Ben Young <software@nextthing.co>  Mon, 9 May 2016 11:49:29 -0800
+
 pocketchip-configs (0.2) stable; urgency=low
 
   * Pull in testing changes.
