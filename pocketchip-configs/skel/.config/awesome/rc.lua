@@ -238,7 +238,6 @@ client.add_signal("unmanage", function (c)
     -- match onboarding
     elseif c.class == "ahoy" then
         onboard = {}
-        focus_home_screen()
     end
 end)
 -- }}}
