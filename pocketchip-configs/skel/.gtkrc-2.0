@@ -16,3 +16,15 @@ gtk-enable-input-feedback-sounds=0
 gtk-xft-antialias=0
 gtk-xft-hinting=0
 gtk-xft-hintstyle="hintfull"
+
+style "crunchwashere"
+{
+  GtkScrollbar::slider-width=20
+  GtkScrollbar::min_slider_length=20
+}
+style "heretoo"
+{
+  GtkRange::stepper_size=20
+}
+class "GtkScrollbar" style "crunchwashere"
+class "GtkRange" style "heretoo"
