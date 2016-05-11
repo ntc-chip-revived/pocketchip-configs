@@ -248,7 +248,7 @@ end)
 hide_mouse_cursor()
 
 -- map the keyboard
-awful.util.spawn_with_shell("xmodmap /usr/local/share/kbd/keymaps/pocketChip.map")
+awful.util.spawn_with_shell("/usr/sbin/pocketchip-load")
 
 -- launch onboarding
 awful.util.spawn_with_shell("onboard $HOME/.config/onboard /usr/share/pocketchip-onboard/")
