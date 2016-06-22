@@ -259,4 +259,4 @@ awful.util.spawn_with_shell("onboard $HOME/.config/onboard /usr/share/pocketchip
 -- launch home screen
 launch_home_screen()
 -- }}}
-v
+
