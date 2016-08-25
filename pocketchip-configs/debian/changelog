@@ -1,3 +1,10 @@
+pocketchip-configs (0.6) stable; urgency=low
+
+  * Keymap fixes.
+  * New control keys for sunvox.
+
+ -- Ben Young <software@nextthing.co>  Wed, 24 Aug 2016 17:49:29 -0800
+
 pocketchip-configs (0.5) stable; urgency=low
 
   * Change awesome wallpaper
