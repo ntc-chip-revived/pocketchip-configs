@@ -1,0 +1,62 @@
+partial default
+xkb_symbols "basic" {
+
+    name[Group1]= "PocketCHIP";
+    include "level3(ralt_switch)"
+
+    key <LTRL> {        [   lalt,lalt,NoSymbol,NoSymbol              ]       };
+    key <TLDE> {        [   grave,asciitilde,NoSymbol,NoSymbol       ]       };
+    key <AE01> {        [   1,exclam,F1,F1                           ]       };
+    key <AE02> {        [   2,at,F2,F2                               ]       };
+    key <AE03> {        [   3,numbersign,F3,F3                       ]       };
+    key <AE04> {        [   4,dollar,F4,F4                           ]       };
+    key <AE05> {        [   5,percent,F5,F5                          ]       };
+    key <AE06> {        [   6,asciicircum,F6,F6                      ]       };
+    key <AE07> {        [   7,ampersand,F7,F7                        ]       };
+    key <AE08> {        [   8,asterisk,F8,F8                         ]       };
+    key <AE09> {        [   9,parenleft,F9,F9                        ]       };
+    key <AE10> {        [   0,parenright,F10,F10                     ]       };
+    key <AE11> {        [   minus,underscore,F11,F11                 ]       };
+    key <KPSU> {        [   minus,underscore,F11,F11                 ]       };
+    key <AE12> {        [   equal,plus,F12,F12                       ]       };
+
+    key <AD01> {        [   q,Q,NoSymbol,NoSymbol                    ]       };
+    key <AD02> {        [   w,W,NoSymbol,NoSymbol                    ]       };
+    key <AD03> {        [   e,E,NoSymbol,NoSymbol                    ]       };
+    key <AD04> {        [   r,R,NoSymbol,NoSymbol                    ]       };
+    key <AD05> {        [   t,T,NoSymbol,NoSymbol                    ]       };
+    key <AD06> {        [   y,Y,braceleft,braceleft                  ]       };
+    key <AD07> {        [   u,U,braceright,braceright                ]       };
+    key <AD08> {        [   i,I,bracketleft,bracketleft              ]       };
+    key <AD09> {        [   o,O,bracketright,bracketright            ]       };
+    key <AD10> {        [   p,P,bar,bar                              ]       };
+    key <AD11> {        [   bracketleft,braceleft                    ]       };
+    key <AD12> {        [   bracketright,braceright                  ]       };
+
+    key <AC01> {        [   a,A,NoSymbol,NoSymbol                    ]       };
+    key <AC02> {        [   s,S,NoSymbol,NoSymbol                    ]       };
+    key <AC03> {        [   d,D,NoSymbol,NoSymbol                    ]       };
+    key <AC04> {        [   f,F,NoSymbol,NoSymbol                    ]       };
+    key <AC05> {        [   g,G,NoSymbol,NoSymbol                    ]       };
+    key <AC06> {        [   h,H,less,less                            ]       };
+    key <AC07> {        [   j,J,greater,greater                      ]       };
+    key <AC08> {        [   k,K,apostrophe,apostrophe                ]       };
+    key <AC09> {        [   l,L,quotedbl,quotedbl                    ]       };
+    key <AC10> {        [   semicolon,colon                          ]       };
+    key <AC11> {        [   apostrophe,quotedbl                      ]       };
+
+    key <AB01> {        [   z,Z,NoSymbol,NoSymbol                    ]       };
+    key <AB02> {        [   x,X,NoSymbol,NoSymbol                    ]       };
+    key <AB03> {        [   c,C,NoSymbol,NoSymbol                    ]       };
+    key <AB04> {        [   v,V,NoSymbol,NoSymbol                    ]       };
+    key <AB05> {        [   b,B,grave,grave                          ]       };
+    key <AB06> {        [   n,N,asciitilde,asciitilde                ]       };
+    key <AB07> {        [   m,M,colon,colon                          ]       };
+    key <AB08> {        [   comma,less,semicolon,semicolon           ]       };
+    key <AB09> {        [   period,comma,semicolon,semicolon         ]       };
+    key <AB10> {        [   slash,question,backslash,backslash       ]       };
+
+    key <LFSH> {        [   lshift,lshift,NoSymbol,NoSymbol         ]       };
+    key <BKSL> {        [   backslash,bar,NoSymbol,NoSymbol         ]       };
+};
+

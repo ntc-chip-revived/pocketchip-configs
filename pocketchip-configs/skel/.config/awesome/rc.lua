@@ -247,7 +247,10 @@ end)
 -- {{{ Startup applications
 hide_mouse_cursor()
 
--- map the keyboard
+-- load keymapping
+awful.util.spawn_with_shell("setxkbmap pocketchip")
+
+-- do screen brightness management
 awful.util.spawn_with_shell("/usr/sbin/pocketchip-load")
 
 -- launch onboarding
@@ -256,3 +259,4 @@ awful.util.spawn_with_shell("onboard $HOME/.config/onboard /usr/share/pocketchip
 -- launch home screen
 launch_home_screen()
 -- }}}
+
